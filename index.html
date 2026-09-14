@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>حبيبك بعتلك ده</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1: #FFE1EA;
+    --bg2: #FFC9DD;
+    --card: #FFF6F8;
+    --rose: #D6336C;
+    --rose-dark: #A02050;
+    --gold: #F4A100;
+    --text: #4A2333;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html,body{
+    margin:0;
+    min-height:100%;
+    background: radial-gradient(circle at 20% 10%, var(--bg2), var(--bg1) 65%);
+    font-family:'Tajawal', sans-serif;
+    color: var(--text);
+    overflow-x:hidden;
+  }
+
+  .stage{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 40px 18px;
+  }
+
+  /* stickers floating around the page */
+  .sticker{
+    position:absolute;
+    font-size: clamp(26px, 5vw, 46px);
+    filter: drop-shadow(0 6px 8px rgba(160,32,80,.25));
+    animation: float 5.5s ease-in-out infinite;
+    user-select:none;
+    pointer-events:none;
+  }
+  .sticker:nth-child(1){ top:6%;  right:8%;  animation-delay:0s; }
+  .sticker:nth-child(2){ top:14%; left:7%;   animation-delay:.6s; }
+  .sticker:nth-child(3){ bottom:10%; right:10%; animation-delay:1.2s; }
+  .sticker:nth-child(4){ bottom:16%; left:6%;  animation-delay:1.8s; }
+  .sticker:nth-child(5){ top:42%; right:3%;  animation-delay:.9s; font-size: clamp(20px,4vw,32px); }
+  .sticker:nth-child(6){ top:45%; left:3%;   animation-delay:1.5s; font-size: clamp(20px,4vw,32px); }
+  .sticker:nth-child(7){ top:2%;  left:38%;  animation-delay:2.1s; font-size: clamp(18px,3vw,26px); }
+  .sticker:nth-child(8){ bottom:4%; left:40%; animation-delay:.3s; font-size: clamp(18px,3vw,26px); }
+
+  @keyframes float{
+    0%, 100% { transform: translateY(0) rotate(-6deg); }
+    50% { transform: translateY(-16px) rotate(6deg); }
+  }
+
+  .card{
+    position:relative;
+    z-index:2;
+    background: var(--card);
+    border-radius: 28px;
+    padding: 46px 34px 40px;
+    max-width: 420px;
+    width:100%;
+    text-align:center;
+    box-shadow: 0 20px 0 -6px rgba(214,51,108,.15), 0 24px 50px rgba(160,32,80,.25);
+    border: 3px dashed rgba(214,51,108,.35);
+  }
+
+  .tape{
+    position:absolute;
+    top:-16px;
+    right:50%;
+    transform: translateX(50%) rotate(-3deg);
+    width: 110px;
+    height: 34px;
+    background: rgba(244,161,0,.55);
+    border: 1px solid rgba(244,161,0,.7);
+  }
+
+  .top-icon{
+    font-size: 50px;
+    display:inline-block;
+    margin-bottom: 6px;
+    animation: wiggle 2.2s ease-in-out infinite;
+  }
+  @keyframes wiggle{
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-10deg); }
+    75% { transform: rotate(10deg); }
+  }
+
+  h1{
+    font-family:'Lalezar', sans-serif;
+    font-weight: 400;
+    font-size: clamp(32px, 6vw, 44px);
+    line-height: 1.25;
+    margin: 4px 0 10px;
+    color: var(--rose-dark);
+  }
+
+  p.sub{
+    font-size: 16px;
+    line-height: 1.8;
+    color: rgba(74,35,51,.75);
+    margin: 0 0 30px;
+  }
+
+  /* 3D pressable button */
+  .btn-3d{
+    position: relative;
+    display:inline-block;
+    border: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+    font-family:'Tajawal', sans-serif;
+  }
+  .btn-3d .front{
+    display:block;
+    font-weight: 900;
+    font-size: 19px;
+    color: #fff;
+    background: linear-gradient(180deg, var(--rose), var(--rose-dark));
+    padding: 17px 42px;
+    border-radius: 999px;
+    transform: translateY(-8px);
+    transition: transform .12s ease;
+    box-shadow: inset 0 2px 0 rgba(255,255,255,.25);
+  }
+  .btn-3d .edge{
+    position:absolute;
+    inset:0;
+    border-radius: 999px;
+    background: #7A1740;
+    transform: translateY(0);
+  }
+  .btn-3d:hover .front{ transform: translateY(-11px); }
+  .btn-3d:active .front{ transform: translateY(-2px); }
+
+  @media (prefers-reduced-motion: reduce){
+    .sticker, .top-icon{ animation:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+
+  <span class="sticker">🌹</span>
+  <span class="sticker">💌</span>
+  <span class="sticker">🎁</span>
+  <span class="sticker">💖</span>
+  <span class="sticker">✨</span>
+  <span class="sticker">🧸</span>
+  <span class="sticker">🍫</span>
+  <span class="sticker">🌷</span>
+
+  <div class="card">
+    <div class="tape"></div>
+    <span class="top-icon">💌</span>
+    <h1>حبيبك بعتلك ده</h1>
+    <p class="sub">فيه حاجة حلوة مستنياك.. دوس على الزرار وشوف</p>
+
+    <button class="btn-3d" onclick="goToSurprise()">
+      <span class="edge"></span>
+      <span class="front">افتح الهدية 🎁</span>
+    </button>
+  </div>
+
+</div>
+
+<script>
+  // =======================================================
+  // غيّر اللينك اللي هنا بس، وحط مكانه اللينك اللي انت عايزه
+  // =======================================================
+  const LINK = "https://confident-crimp-pang.ngrok-free.dev";
+
+  function goToSurprise(){
+    window.location.href = LINK;
+  }
+</script>
+
+</body>
+</html>
