@@ -1,196 +1,400 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>حبيبك بعتلك ده</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg1: #FFE1EA;
-    --bg2: #FFC9DD;
-    --card: #FFF6F8;
-    --rose: #D6336C;
-    --rose-dark: #A02050;
-    --gold: #F4A100;
-    --text: #4A2333;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Romantic Pixel Heart</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { 
+            margin: 0; 
+            background: #05020a; 
+            color: #fff; 
+            overflow: hidden; 
+            height: 100vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            font-family: 'Press Start 2P', cursive; 
+        }
 
-  *{ box-sizing: border-box; }
+        canvas#pixelCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+        
+        /* 3D Login Box Styling */
+        .login-box { 
+            position: relative; 
+            z-index: 10; 
+            background: rgba(17, 17, 24, 0.95); 
+            border: 3px solid #ff2a6d; 
+            padding: 30px; 
+            text-align: center; 
+            box-shadow: 0 0 30px rgba(255, 42, 109, 0.4), 8px 8px 0px #000; 
+            width: 340px;
+            border-radius: 12px;
+            transform: perspective(600px) rotateY(-3deg);
+            transition: transform 0.3s ease, opacity 0.5s ease;
+        }
 
-  html,body{
-    margin:0;
-    min-height:100%;
-    background: radial-gradient(circle at 20% 10%, var(--bg2), var(--bg1) 65%);
-    font-family:'Tajawal', sans-serif;
-    color: var(--text);
-    overflow-x:hidden;
-  }
+        .login-box label { display: block; margin-top: 12px; margin-bottom: 6px; font-size: 8px; color: #05d9e8; text-align: left; letter-spacing: 1px; }
+        .login-box input { 
+            width: 100%; 
+            padding: 12px; 
+            background: #000; 
+            border: 2px solid #05d9e8; 
+            color: #fff; 
+            font-size: 10px; 
+            text-align: center; 
+            outline: none; 
+            border-radius: 6px;
+            font-family: 'Press Start 2P', cursive;
+        }
+        .login-box input:focus { border-color: #ff2a6d; box-shadow: 0 0 10px rgba(255, 42, 109, 0.5); }
 
-  .stage{
-    position:relative;
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding: 40px 18px;
-  }
+        .login-box button { 
+            background: linear-gradient(45deg, #ff2a6d, #ff5e97); 
+            color: #fff; 
+            border: none; 
+            padding: 14px; 
+            font-size: 9px; 
+            cursor: pointer; 
+            margin-top: 18px;
+            width: 100%;
+            border-radius: 6px;
+            box-shadow: 0 4px 0px #800033;
+            font-family: 'Press Start 2P', cursive;
+            transition: all 0.2s;
+        }
+        .login-box button:active { transform: translateY(3px); box-shadow: 0 1px 0px #800033; }
 
-  /* stickers floating around the page */
-  .sticker{
-    position:absolute;
-    font-size: clamp(26px, 5vw, 46px);
-    filter: drop-shadow(0 6px 8px rgba(160,32,80,.25));
-    animation: float 5.5s ease-in-out infinite;
-    user-select:none;
-    pointer-events:none;
-  }
-  .sticker:nth-child(1){ top:6%;  right:8%;  animation-delay:0s; }
-  .sticker:nth-child(2){ top:14%; left:7%;   animation-delay:.6s; }
-  .sticker:nth-child(3){ bottom:10%; right:10%; animation-delay:1.2s; }
-  .sticker:nth-child(4){ bottom:16%; left:6%;  animation-delay:1.8s; }
-  .sticker:nth-child(5){ top:42%; right:3%;  animation-delay:.9s; font-size: clamp(20px,4vw,32px); }
-  .sticker:nth-child(6){ top:45%; left:3%;   animation-delay:1.5s; font-size: clamp(20px,4vw,32px); }
-  .sticker:nth-child(7){ top:2%;  left:38%;  animation-delay:2.1s; font-size: clamp(18px,3vw,26px); }
-  .sticker:nth-child(8){ bottom:4%; left:40%; animation-delay:.3s; font-size: clamp(18px,3vw,26px); }
+        .error-msg { color: #ff2a6d; font-size: 8px; margin-top: 10px; display: none; }
 
-  @keyframes float{
-    0%, 100% { transform: translateY(0) rotate(-6deg); }
-    50% { transform: translateY(-16px) rotate(6deg); }
-  }
+        .main-content { 
+            display: none; 
+            position: relative; 
+            z-index: 5; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+        }
+        .main-content.show { display: flex; opacity: 1; }
 
-  .card{
-    position:relative;
-    z-index:2;
-    background: var(--card);
-    border-radius: 28px;
-    padding: 46px 34px 40px;
-    max-width: 420px;
-    width:100%;
-    text-align:center;
-    box-shadow: 0 20px 0 -6px rgba(214,51,108,.15), 0 24px 50px rgba(160,32,80,.25);
-    border: 3px dashed rgba(214,51,108,.35);
-  }
+        /* Smooth Romantic 3D Heart Wrapper */
+        .heart-wrapper {
+            position: relative;
+            width: 360px;
+            height: 340px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: romanticPulse 1.4s infinite alternate ease-in-out;
+            filter: drop-shadow(0 0 25px rgba(255, 42, 109, 0.8));
+        }
 
-  .tape{
-    position:absolute;
-    top:-16px;
-    right:50%;
-    transform: translateX(50%) rotate(-3deg);
-    width: 110px;
-    height: 34px;
-    background: rgba(244,161,0,.55);
-    border: 1px solid rgba(244,161,0,.7);
-  }
+        .heart-svg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            transition: all 0.5s ease;
+        }
 
-  .top-icon{
-    font-size: 50px;
-    display:inline-block;
-    margin-bottom: 6px;
-    animation: wiggle 2.2s ease-in-out infinite;
-  }
-  @keyframes wiggle{
-    0%, 100% { transform: rotate(0deg); }
-    25% { transform: rotate(-10deg); }
-    75% { transform: rotate(10deg); }
-  }
+        .heart-text-container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 20px;
+            margin-top: -10px;
+        }
 
-  h1{
-    font-family:'Lalezar', sans-serif;
-    font-weight: 400;
-    font-size: clamp(32px, 6vw, 44px);
-    line-height: 1.25;
-    margin: 4px 0 10px;
-    color: var(--rose-dark);
-  }
+        .heart-title {
+            font-size: 11px;
+            color: #ffffff;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0px #000, -1px -1px 0px #000, 0 0 10px #ff2a6d;
+            margin-bottom: 12px;
+        }
 
-  p.sub{
-    font-size: 16px;
-    line-height: 1.8;
-    color: rgba(74,35,51,.75);
-    margin: 0 0 30px;
-  }
+        /* Romantic Names Side-by-Side */
+        .names-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 11px;
+            color: #05d9e8;
+            text-shadow: 2px 2px 0px #000, 0 0 8px #05d9e8;
+            white-space: nowrap;
+        }
 
-  /* 3D pressable button */
-  .btn-3d{
-    position: relative;
-    display:inline-block;
-    border: none;
-    background: none;
-    padding: 0;
-    cursor: pointer;
-    font-family:'Tajawal', sans-serif;
-  }
-  .btn-3d .front{
-    display:block;
-    font-weight: 900;
-    font-size: 19px;
-    color: #fff;
-    background: linear-gradient(180deg, var(--rose), var(--rose-dark));
-    padding: 17px 42px;
-    border-radius: 999px;
-    transform: translateY(-8px);
-    transition: transform .12s ease;
-    box-shadow: inset 0 2px 0 rgba(255,255,255,.25);
-  }
-  .btn-3d .edge{
-    position:absolute;
-    inset:0;
-    border-radius: 999px;
-    background: #7A1740;
-    transform: translateY(0);
-  }
-  .btn-3d:hover .front{ transform: translateY(-11px); }
-  .btn-3d:active .front{ transform: translateY(-2px); }
+        .heart-icon {
+            color: #ff2a6d;
+            font-size: 12px;
+            animation: miniPulse 0.8s infinite alternate;
+            text-shadow: 0 0 6px #ff2a6d;
+        }
 
-  @media (prefers-reduced-motion: reduce){
-    .sticker, .top-icon{ animation:none; }
-  }
-</style>
+        @keyframes romanticPulse { 
+            0% { transform: scale(1) rotate(0deg); } 
+            100% { transform: scale(1.06) rotate(1deg); } 
+        }
+
+        @keyframes miniPulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.3); }
+        }
+
+        /* Customization Toolbar */
+        .design-controls {
+            display: none;
+            position: fixed;
+            bottom: 25px;
+            z-index: 30;
+            background: rgba(10, 10, 15, 0.9);
+            border: 2px solid #ff2a6d;
+            padding: 10px 16px;
+            box-shadow: 0 0 20px rgba(255, 42, 109, 0.3);
+            border-radius: 20px;
+            gap: 12px;
+        }
+
+        .design-controls button {
+            background: #000;
+            color: #05d9e8;
+            border: 1.5px solid #05d9e8;
+            padding: 8px 12px;
+            font-size: 7px;
+            cursor: pointer;
+            border-radius: 12px;
+            font-family: 'Press Start 2P', cursive;
+            transition: all 0.2s ease;
+        }
+
+        .design-controls button:hover {
+            background: #ff2a6d;
+            color: #fff;
+            border-color: #ff2a6d;
+            box-shadow: 0 0 10px #ff2a6d;
+        }
+
+        /* Admin Sidebar */
+        .admin-sidebar {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 20;
+            background: rgba(17, 17, 24, 0.95);
+            border: 3px solid #05d9e8;
+            padding: 18px 12px;
+            width: 300px;
+            max-height: 80vh;
+            overflow-y: auto;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(5, 217, 232, 0.3);
+        }
+
+        .admin-sidebar h3 { font-size: 8px; color: #05d9e8; margin: 0 0 12px 0; text-align: center; border-bottom: 2px solid #ff2a6d; padding-bottom: 8px; }
+        .admin-sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .admin-sidebar li { background: #000; border: 1px solid #ff2a6d; padding: 8px; margin-bottom: 8px; font-size: 8px; border-radius: 4px; }
+    </style>
 </head>
 <body>
 
-<div class="stage">
+    <canvas id="pixelCanvas"></canvas>
 
-  <span class="sticker">🌹</span>
-  <span class="sticker">💌</span>
-  <span class="sticker">🎁</span>
-  <span class="sticker">💖</span>
-  <span class="sticker">✨</span>
-  <span class="sticker">🧸</span>
-  <span class="sticker">🍫</span>
-  <span class="sticker">💕</span>
+    <!-- Login Box -->
+    <div class="login-box" id="loginBox">
+        <label for="userName">YOUR NAME</label>
+        <input type="text" id="userName" placeholder="Your name..." autocomplete="off">
+        
+        <label for="crushName">CRUSH'S NAME</label>
+        <input type="text" id="crushName" placeholder="Crush's name..." autocomplete="off">
+        
+        <button id="loginBtn" onclick="handleLogin()">SHOW LOVE</button>
+        <div class="error-msg" id="errorMsg">PLEASE FILL BOTH NAMES!</div>
+    </div>
 
-  <div class="card">
-    <div class="tape"></div>
-    <span class="top-icon">💟</span>
-    <h1>حبيبك بعتلك ده</h1>
-    <p class="sub">فيه حاجة حلوة مستنياك.. دوس على الزرار وشوف</p>
+    <!-- Heart Display Screen -->
+    <div class="main-content" id="mainContent">
+        <div class="heart-wrapper">
+            <!-- Vector Heart (No pixelation/blur) -->
+            <svg class="heart-svg" id="heartSvg" viewBox="0 0 100 90" preserveAspectRatio="xMidYMid meet">
+                <defs>
+                    <linearGradient id="heartGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#ff69b4" />
+                        <stop offset="50%" stop-color="#ff2a6d" />
+                        <stop offset="100%" stop-color="#800033" />
+                    </linearGradient>
+                    <linearGradient id="heartGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#05d9e8" />
+                        <stop offset="100%" stop-color="#004466" />
+                    </linearGradient>
+                    <linearGradient id="heartGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#ffb6c1" />
+                        <stop offset="50%" stop-color="#ff1493" />
+                        <stop offset="100%" stop-color="#4a001f" />
+                    </linearGradient>
+                </defs>
+                <path id="heartPath" d="M 50,25 C 50,25 35,0 18,0 C 7,0 0,9 0,21 C 0,40 28,60 50,85 C 72,60 100,40 100,21 C 100,9 93,0 82,0 C 65,0 50,25 50,25 Z" fill="url(#heartGrad1)" />
+                <!-- Gloss Effect -->
+                <path d="M 20,8 C 28,8 35,16 38,24 C 32,20 22,16 16,22 C 14,18 16,11 20,8 Z" fill="rgba(255, 255, 255, 0.4)" />
+            </svg>
 
-    <button class="btn-3d" onclick="goToSurprise()">
-      <span class="edge"></span>
-      <span class="front">يوسف بيحبك 💕</span>
-    </button>
-  </div>
+            <div class="heart-text-container">
+                <div class="heart-title">I LOVE YOU</div>
+                <div class="names-row">
+                    <span id="p1">Yosef</span>
+                    <span class="heart-icon">♥</span>
+                    <span id="p2">Toto</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
-</div>
+    <!-- Live Design Toolbar -->
+    <div class="design-controls" id="designControls">
+        <button onclick="nextHeartStyle()">CHANGE HEART</button>
+        <button onclick="nextRainStyle()">CHANGE RAIN</button>
+    </div>
 
-<script>
-  // =======================================================
-  // غيّر اللينك اللي هنا بس، وحط مكانه اللينك اللي انت عايزه
-  // =======================================================
-  const LINK = "https://confident-crimp-pang.ngrok-free.dev";
+    <!-- Admin Visitor Log -->
+    <div class="admin-sidebar" id="adminSidebar">
+        <h3>VISITOR LOG</h3>
+        <ul id="namesList"><li>Loading...</li></ul>
+    </div>
 
-  function goToSurprise(){
-    // بنأخر التنقل شوية عشان الموبايل ميعتبرهاش
-    // "ضغطة مباشرة على لينك" فيفتحلك انستجرام كتطبيق،
-    // وبكده غالبًا هيفضل فاتح في المتصفح بدل ما يحولك للأبلكيشن
-    setTimeout(function(){
-      window.location.href = LINK;
-    }, 100);
-  }
-</script>
+    <script>
+        const BIN_ID = "6a8a29bbda38895dfe05305c"; 
+        const MASTER_KEY = "$2a$10$uOfTZgyBYBrFiwvCyQxyg.o2Xy9qgj/GRPm2C2qbBNxtscnLFYJ82";
 
+        let heartStyleIdx = 0;
+        let rainStyleIdx = 0;
+
+        async function handleLogin() {
+            const user = document.getElementById('userName').value.trim();
+            const crush = document.getElementById('crushName').value.trim();
+            if (!user || !crush) {
+                document.getElementById('errorMsg').style.display = 'block';
+                return;
+            }
+
+            document.getElementById('p1').innerText = user;
+            document.getElementById('p2').innerText = crush;
+
+            if (user === "yosef123") {
+                document.getElementById('adminSidebar').style.display = 'block';
+                loadNames();
+            } else {
+                saveNameToCloud(user, crush);
+            }
+
+            document.getElementById('loginBox').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('loginBox').style.display = 'none';
+                document.getElementById('mainContent').classList.add('show');
+                document.getElementById('designControls').style.display = 'flex';
+            }, 400);
+        }
+
+        /* 3 Heart Styles (Crisp Vector Shapes & Gradients) */
+        const heartDesigns = [
+            { path: "M 50,25 C 50,25 35,0 18,0 C 7,0 0,9 0,21 C 0,40 28,60 50,85 C 72,60 100,40 100,21 C 100,9 93,0 82,0 C 65,0 50,25 50,25 Z", fill: "url(#heartGrad1)" },
+            { path: "M 50,20 C 50,20 38,2 20,2 C 8,2 0,11 0,24 C 0,46 35,68 50,88 C 65,68 100,46 100,24 C 100,11 92,2 80,2 C 62,2 50,20 50,20 Z", fill: "url(#heartGrad2)" },
+            { path: "M 50,30 L 20,2 L 2,24 L 2,40 L 50,88 L 98,40 L 98,24 L 80,2 Z", fill: "url(#heartGrad3)" } // Retro Crystal Geometric Heart
+        ];
+
+        function nextHeartStyle() {
+            heartStyleIdx = (heartStyleIdx + 1) % heartDesigns.length;
+            const pathElem = document.getElementById('heartPath');
+            pathElem.setAttribute('d', heartDesigns[heartStyleIdx].path);
+            pathElem.setAttribute('fill', heartDesigns[heartStyleIdx].fill);
+        }
+
+        async function saveNameToCloud(user, crush) {
+            try {
+                const resGet = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, { headers: { 'X-Master-Key': MASTER_KEY } });
+                const dataGet = await resGet.json();
+                let currentNames = Array.isArray(dataGet.record) ? dataGet.record : [];
+                currentNames.push({ user, crush, date: new Date().toLocaleString('en-US') });
+                await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': MASTER_KEY },
+                    body: JSON.stringify(currentNames)
+                });
+            } catch (e) {}
+        }
+
+        async function loadNames() {
+            const list = document.getElementById('namesList');
+            try {
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, { headers: { 'X-Master-Key': MASTER_KEY } });
+                const data = await res.json();
+                list.innerHTML = '';
+                data.record.reverse().forEach(item => {
+                    let li = document.createElement('li');
+                    li.innerHTML = `<strong style="color:#05d9e8">${item.user || item.name}</strong> + <strong style="color:#ff2a6d">${item.crush || ''}</strong><br><span style="color:#aaa; font-size:6px;">${item.date}</span>`;
+                    list.appendChild(li);
+                });
+            } catch (e) { list.innerHTML = '<li>Error loading log</li>'; }
+        }
+
+        /* Particles Background System */
+        const canvas = document.getElementById('pixelCanvas');
+        const ctx = canvas.getContext('2d');
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        let particles = [];
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < 50; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 3 + 2,
+                    speed: Math.random() * 1.2 + 0.6
+                });
+            }
+        }
+        initParticles();
+
+        function nextRainStyle() {
+            rainStyleIdx = (rainStyleIdx + 1) % 3;
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let p of particles) {
+                if (rainStyleIdx === 0) {
+                    // Hearts Rain
+                    ctx.fillStyle = '#ff2a6d';
+                    ctx.font = `${p.size * 4}px Arial`;
+                    ctx.fillText('♥', p.x, p.y);
+                } else if (rainStyleIdx === 1) {
+                    // Stars Rain
+                    ctx.fillStyle = '#05d9e8';
+                    ctx.fillRect(p.x, p.y, p.size * 2, p.size * 2);
+                } else {
+                    // Glowing Pixels
+                    ctx.fillStyle = '#fff';
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = '#ff2a6d';
+                    ctx.fillRect(p.x, p.y, p.size, p.size);
+                    ctx.shadowBlur = 0;
+                }
+
+                p.y += p.speed;
+                if (p.y > canvas.height) { p.y = -10; p.x = Math.random() * canvas.width; }
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
 </body>
 </html>
